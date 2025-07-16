@@ -1,0 +1,11 @@
+---
+title: "README"
+author: "Kelompok 4"
+date: "2025-07-16"
+output: html_document
+---
+
+
+Diskrit 1
+
+Function ini merupakan simuladi dan fungsi PMF dan CDF untuk distribusi Bernoulli dan Binomial
