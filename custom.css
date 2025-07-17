@@ -1,0 +1,163 @@
+/* ???? DISNEY PASTEL THEME */
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background-color: #fff7fb;
+  color: #5c5c5c;
+  padding: 40px;
+  font-size: 16px;
+  line-height: 1.8;
+  animation: fadeIn 1.5s ease;
+}
+
+/* ???? HEADINGS */
+h1, h2, h3, h4 {
+  font-weight: 700;
+  font-family: 'Quicksand', sans-serif;
+  margin-top: 40px;
+  margin-bottom: 10px;
+  transition: color 0.3s ease;
+}
+
+h1 {
+  font-size: 34px;
+  color: #e49fc4; /* Pastel pink */
+  border-bottom: 3px solid #fbd6e1;
+  padding-bottom: 6px;
+}
+
+h2 {
+  font-size: 28px;
+  color: #a7c4ea; /* Light blue */
+  border-bottom: 2px dashed #d5e6f7;
+}
+
+h3 {
+  font-size: 22px;
+  color: #fac89d; /* Peach */
+}
+
+h4 {
+  font-size: 18px;
+  color: #b9e4cf; /* Mint */
+}
+
+/* ???? TOC */
+.toc {
+  background: #fef1f5;
+  border-left: 5px solid #e49fc4;
+  padding: 18px 24px;
+  border-radius: 12px;
+  animation: slideIn 1.2s ease;
+}
+
+.toc a {
+  color: #c486a8;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.toc a:hover {
+  color: #a46ba1;
+  text-decoration: underline;
+}
+
+/* ???? SHAPE INTERAKTIF */
+.shape {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform, box-shadow;
+}
+
+.shape:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 8px 20px rgba(228, 159, 196, 0.25),
+              0 0 8px rgba(189, 233, 220, 0.3);
+}
+
+
+/* ???? CODE BLOCK */
+pre, code {
+  background: #fffafc;
+  border: 1px solid #e4bcd0;
+  padding: 10px 16px;
+  border-radius: 10px;
+  color: #5c5c5c;
+  box-shadow: inset 0 0 10px rgba(228, 159, 196, 0.08);
+  transition: box-shadow 0.3s ease;
+  animation: floatIn 1.4s ease;
+}
+
+pre:hover {
+  box-shadow: 0 0 12px rgba(189, 233, 220, 0.4);
+}
+
+/* ???? TABLE */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  background: #ffffff;
+  border: 1px solid #f5cedb;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 14px 18px;
+  border-bottom: 1px solid #f4e4ea;
+}
+
+th {
+  background-color: #fef5f8;
+  color: #db96bb;
+}
+
+tr:nth-child(even) {
+  background-color: #fffafc;
+}
+
+/* ???? LINK */
+a {
+  color: #c486a8;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #a46ba1;
+  text-shadow: 0 0 4px rgba(228, 159, 196, 0.3);
+}
+
+/* ???? BLOCKQUOTE */
+blockquote {
+  background: #fdf2f7;
+  border-left: 5px solid #e49fc4;
+  padding: 18px 22px;
+  font-style: italic;
+  border-radius: 10px;
+  color: #6f6f6f;
+  animation: fadeIn 1s ease;
+}
+
+/* ???? ANIMATIONS */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes floatIn {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+    filter: blur(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}

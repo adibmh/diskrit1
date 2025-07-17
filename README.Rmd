@@ -1,11 +1,471 @@
 ---
-title: "README"
+title: "Distribusi Diskrit I"
 author: "Kelompok 4"
-date: "2025-07-16"
-output: html_document
+date: "2025-07-06"
+output:
+  html_document:
+    toc: true
+    toc-location: left
+    toc_depth: 2
+    toc_float: true
+    number_sections: true
+    theme: cosmo
+    css: custom.css
+  word_document:
+    toc: true
+    toc_depth: '2'
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 
-Diskrit 1
+# Distribusi Bernoulli
+Distribusi Bernoulli adalah distribusi probabilitas diskrit di mana variabel acak hanya dapat memiliki 2 kemungkinan hasil. Jika dalam uji coba Bernoulli variabel acak bernilai 1, berarti ini adalah keberhasilan. Probabilitas keberhasilan diberikan oleh p. Demikian pula, jika nilai variabel acak adalah 0, ini menunjukkan kegagalan. 
 
-Function ini merupakan simuladi dan fungsi PMF dan CDF untuk distribusi Bernoulli dan Binomial
+* **PMF** 
+
+Probabilitas bahwa variabel acak diskrit akan sama persis dengan suatu nilai diberikan oleh fungsi massa probabilitas. Rumus untuk pmf, f, yang dikaitkan dengan variabel acak Bernoulli atas kemungkinan hasil 'x' diberikan sebagai berikut:
+$$
+P(X = x) = p^x (1 - p)^{1 - x}, \quad x = 0, 1
+$$
+
+* **CDF**
+
+Fungsi distribusi kumulatif dari variabel acak Bernoulli X ketika dievaluasi pada x didefinisikan sebagai probabilitas bahwa X akan mengambil nilai yang lebih kecil dari atau sama dengan x. Rumusnya diberikan sebagai berikut:
+$$
+F(x) = 
+\begin{cases}
+0 & \text{jika } x < 0 \\
+1 - p & \text{jika } 0 \leq x < 1 \\
+1 & \text{jika } x \geq 1
+\end{cases}
+$$
+
+# Distribusi Binomial
+Distribusi binomial merupakan distribusi probabilitas diskrit jumlah keberhasilan dalam n percobaan yang memiliki dua hasil yang tak saling berkaitan, dengan setiap percobaan punya probabilitas p. Dari sini, kita bisa menarik kesimpulan beberapa syarat terjadinya distribusi binomial:
+
+1. Ada n kali percobaan.
+2. Hanya ada dua kemungkinan dalam setiap percobaan, ya atau tidak, sukses atau gagal, dan sebagainya.
+3. Peluang percobaan harus sama setiap kali dilakukan, tak bisa berubah.
+4. Tak saling berkaitan atau independen antara satu peristiwa dalam percobaan itu dengan peristiwa lainnya.
+
+
+* **PMF**
+
+Fungsi massa probabilitas (PMF) dari distribusi Binomial adalah:
+
+$$
+P(X = x) = \binom{n}{x} p^x (1 - p)^{n - x}, \quad x = 0, 1, 2, \dots, n
+$$
+
+* **CDF**
+
+Fungsi distribusi kumulatif (CDF) dari distribusi Binomial adalah:
+
+$$
+F(x) = P(X \leq x) = \sum_{k=0}^{\lfloor x \rfloor} \binom{n}{k} p^k (1 - p)^{n - k}
+$$
+
+# Estimator 
+
+## Bernoulli
+$$
+\hat{p} = \frac{1}{n} \sum_{i=1}^{n} x_i
+$$
+
+> * $X_i$ : nilai pengamatan ke-𝑖 hanya bisa 0 (gagal) atau 1 (sukses)
+> * n : jumlah total pengamatan
+> * $\hat{p}$ : estimator dari parameter 𝑝, yaitu peluang sukses
+
+## Binomial
+$$
+\hat{p} = \frac{\bar{X}}{m} = \frac{1}{nm} \sum_{i=1}^{n} X_i
+$$
+
+> * $X_i$ : jumlah sukses (misal: jumlah cacat) dalam percobaan ke-𝑖
+> * n : jumlah pengamatan
+> * m : jumlah percobaan dalam satu batch (misalnya, 50 kue per batch)
+> * ${\bar{X}}$ : rata-rata nilai X
+> * $\hat{p}$ : estimasi peluang keberhasilan dari data Binomial
+
+# Mebuat Packages dalam RStudio
+
+> Berikut adalah langkah-langkah untuk membuat package di RStudio:
+> 
+> ```r
+> usethis::use_r("bernoulli")
+> usethis::use_r("binomial")
+> 
+> devtools::document()
+> devtools::build()
+> devtools::install()
+> 
+> devtools::check()
+>
+> library(diskrit1)
+>```
+
+> Bernoulli
+> ```r
+#' Simulasi Bernoulli
+#'
+> simulasi_bernoulli <- function(n, p, plot = FALSE) {
+>  data <- rbinom(n, 1, p)
+> #' Melakukan simulasi distribusi Bernoulli.
+> #'
+> #' @param n Jumlah observasi
+> #' @param p Probabilitas sukses (antara 0 dan 1)
+> #' @param plot Logika, TRUE jika ingin memvisualisasikan hasil simulasi
+> #'
+> #' @return Vektor data Bernoulli hasil simulasi
+> #' @export
+>
+>  if (plot) {
+>   barplot(table(data),
+>             col = c("tomato", "lightgreen"),
+>             names.arg = c("0", "1"),
+>             main = paste("Simulasi Bernoulli (n =", n, ", p =", p, ")"),
+>             xlab = "x", ylab = "Frekuensi")
+>   }
+> 
+>   return(data)
+> }
+> 
+> #' PMF Bernoulli
+> #'
+> #' Menghitung probabilitas titik (PMF) dari distribusi Bernoulli.
+> #'
+> #' @param x Nilai 0 atau 1
+> #' @param p Probabilitas sukses (antara 0 dan 1)
+> #'
+> #' @return Nilai probabilitas f(x)
+> #' @export
+> pmf_bernoulli <- function(x, p) {
+> ifelse(x == 1, p, 1 - p)
+> }
+>
+> #' CDF Bernoulli
+> #'
+> #' Menghitung fungsi distribusi kumulatif (CDF) dari distribusi Bernoulli.
+> #'
+> #' @param x Nilai x (bilangan real)
+> #' @param p Probabilitas sukses (antara 0 dan 1)
+> #'
+> #' @return Probabilitas kumulatif hingga x
+> #' @export
+> cdf_bernoulli <- function(x, p) {
+> ifelse(x < 0, 0, ifelse(x < 1, 1 - p, 1))
+> }
+>
+> #' Estimasi Parameter p Bernoulli
+> #'
+> #' Mengestimasi parameter p (probabilitas sukses) dari data Bernoulli.
+> #'
+> #' @param data Vektor data berisi 0 dan 1
+> #'
+> #' @return Nilai estimasi p̂
+> #' @export
+> estimasi_p_bernoulli <- function(data) {
+>   if (!all(data %in% c(0, 1))) {
+>     stop("Data hanya boleh berisi 0 dan 1 untuk distribusi Bernoulli.")
+>   }
+> 
+>   p_hat <- mean(data)
+>   cat("Estimasi p (p̂) Bernoulli:", round(p_hat, 4), "\n")
+>   return(p_hat)
+> }
+> 
+> #' Plot Distribusi Frekuensi Bernoulli
+> #'
+> #' Membuat plot distribusi frekuensi dari data Bernoulli (0 dan 1).
+> #'
+> #' @param data Vektor data berisi 0 dan 1
+> #'
+> #' @return Barplot distribusi frekuensi
+> #' @export
+> plot_bernoulli <- function(data) {
+> if (!all(data %in% c(0, 1))) {
+>   stop("Data harus berupa 0 dan 1 (Bernoulli).")
+>  }
+>
+> barplot(table(factor(data, levels = c(0, 1))),
+>         col = c("tomato", "lightgreen"),
+>         names.arg = c("Gagal (0)", "Sukses (1)"),
+>         main = "Distribusi Frekuensi Bernoulli",
+>         ylab = "Frekuensi",
+>         xlab = "Kategori")
+> }
+> ```
+
+> Binomial
+>
+> ```r
+> #' Simulasi Binomial
+> #'
+> #' @param n Jumlah observasi
+> #' @param size Jumlah percobaan
+> #' @param p Probabilitas sukses
+> #' @param plot Logika, apakah hasil akan diplot?
+> #' @return Vektor data Binomial
+> #' @export
+> simulasi_binomial <- function(n, size, p, plot = FALSE) {
+>  data <- rbinom(n, size, p)
+>
+>  if (plot) {
+>    barplot(table(data),
+>            col = "skyblue",
+>            main = paste("Simulasi Binomial (n =", n, ", size =", size, ", p =", p, ")"),
+>            xlab = "x", ylab = "Frekuensi")
+>  }
+>
+>  return(data)
+> }
+>
+> #' PMF Binomial (dengan rumus eksplisit)
+> #'
+> #' @param x Nilai x (jumlah sukses)
+> #' @param size Jumlah percobaan (n)
+> #' @param p Probabilitas sukses
+> #' @return Probabilitas f(x)
+> #' @export
+> pmf_binomial <- function(x, size, p) {
+>  if (x < 0 || x > size || p < 0 || p > 1) {
+>    return(0)
+>  }
+>  choose(size, x) * p^x * (1 - p)^(size - x)
+> }
+> 
+> #' CDF Binomial (dengan penjumlahan manual PMF)
+> #'
+> #' @param x Nilai x
+> #' @param size Jumlah percobaan (n)
+> #' @param p Probabilitas sukses
+> #' @return Probabilitas kumulatif hingga x
+> #' @export
+>cdf_binomial <- function(x, size, p) {
+>  if (x < 0) {
+>    return(0)
+>  }
+>  sum(sapply(0:floor(x), function(k) {
+>    choose(size, k) * p^k * (1 - p)^(size - k)
+>  }))
+> }
+>
+> #' Estimasi Parameter p untuk Distribusi Binomial
+> #'
+> #' @param data Vektor jumlah sukses per observasi
+> #' @param size Jumlah percobaan per observasi
+> #' @return Estimasi p̂ sebagai proporsi keberhasilan
+> #' @export
+> estimasi_p_binomial <- function(data, size) {
+>  if (any(data < 0) || any(data > size)) {
+>    stop("Nilai data harus di antara 0 dan size.")
+>  }
+>  p_hat <- mean(data) / size
+>  cat("Estimasi p (p̂) Binomial:", round(p_hat, 4), "\n")
+>  return(p_hat)
+>  }
+> ' Analisis dan Visualisasi Data Binomial
+> '
+> ' @param data Vektor jumlah sukses per pelanggan > misalnya dari 10 pelanggan)
+> ' @param size Jumlah percobaan per pelanggan 
+> harus diketahui)
+> ' @return Estimasi p̂ dan barplot jumlah sukses
+> ' @export
+> lot_binomial <- function(data, size) {
+> if (any(data < 0) || any(data > size)) {
+>     stop("Nilai data harus berada antara 0 dan > size." }
+>   n <- length(data)
+>   p_hat <- mean(data) / size
+>   cat("Jumlah Observasi:", n, "\n")
+>   cat("Percobaan per Observasi:", size, "\n")
+>   cat("Estimasi Probabilitas Sukses p̂:", > round(p_hat, 4), "\n")
+> 
+>   barplot(table(factor(data, levels = 0:size)),
+>           col = "skyblue",
+>           main = paste("Distribusi Jumlah Sukses > (Binomial, size =", size, ")"),
+>           xlab = "Jumlah Sukses", ylab = > "Frekuensi")}
+>```
+
+# Simulasi 
+
+## Bernoulli
+
+```{r simulasibern, echo=TRUE, warning=FALSE}
+
+library(diskrit1)
+# Simulasi Bernoulli dengan plot
+simulasi_bernoulli(n = 100, p = 0.6, plot = TRUE)
+```
+
+## Binomial
+```{r simulasibinom, echo=TRUE, warning=FALSE}
+
+library(diskrit1)
+# Simulasi Binomial dengan plot
+simulasi_binomial(n = 200, size = 10, p = 0.3, plot = TRUE)
+```
+# Studi Kasus 
+
+## Bernoulli
+Sebuah perusahaan pengiriman makanan berbasis aplikasi ingin mengetahui apakah pelanggan puas terhadap layanan pengiriman cepat mereka. Mereka mengirim survei sederhana kepada pelanggan yang baru saja menyelesaikan pesanan, dengan pertanyaan:
+
+> "Apakah kamu puas terhadap kecepatan pengiriman hari ini?"  
+> Jawaban yang diterima hanya:  
+> `1 = Puas`, `0 = Tidak Puas`.
+
+Sebanyak **30 responden** mengisi survei tersebut.
+
+**Pertanyaan analisis:**
+
+1. Berapa estimasi proporsi pelanggan yang puas terhadap layanan?
+2. Tampilkan grafik distribusi data (berapa banyak yang puas vs tidak puas).
+3. Apakah perusahaan dapat dikatakan berhasil mempertahankan kualitas layanan?
+4. Berapa peluang secara teoritis bahwa seorang pelanggan puas?
+5. Berapa peluang kumulatif bahwa pelanggan tidak puas?
+
+## Binomial
+Dalam kelas Matematika Diskrit, seorang dosen memberikan kuis mingguan berisi **5 soal** kepada setiap mahasiswa. Ia tertarik menilai sejauh mana penguasaan materi oleh mahasiswa, dilihat dari jumlah soal yang dijawab benar oleh masing-masing mahasiswa.
+
+Sebanyak **20 mahasiswa** mengikuti kuis tersebut.
+
+**Pertanyaan analisis:**
+
+1. Berapa estimasi probabilitas mahasiswa menjawab benar (per soal)?
+2. Tampilkan grafik distribusi jumlah jawaban benar mahasiswa.
+3. Apakah mayoritas mahasiswa memahami materi kuis dengan baik?
+4. Berapa peluang seorang mahasiswa menjawab tepat 3 soal dengan benar?
+5. Berapa peluang maksimal hanya menjawab 2 soal dengan benar?
+
+# Output dan Plot
+
+## Bernoulli
+
+* **Output**
+
+```{r Bernoulli, echo=TRUE, warning=FALSE}
+library(diskrit1)
+#masukkan data
+data_bernoulli <- c(1, 1, 1, 0, 1, 1, 0, 1, 1, 1,
+                    0, 1, 1, 1, 1, 0, 1, 0, 1, 1,
+                    1, 1, 1, 0, 0, 1, 1, 0, 1, 1)
+# Estimasi probabilitas p̂
+ estimasi_p_bernoulli(data_bernoulli)
+```
+> **Nomor 1**
+>
+>Didapatkan *output* sekitar 0.73, maka sekitar 73% pelanggan menyatakan puas terhadap layanan.
+
+```{r plots, echo=TRUE, warning=FALSE}
+#Plot distribusi
+plot_bernoulli(data_bernoulli)
+```
+
+> **Nomor 2**
+>
+> Berdasarkan estimasi probabilitas sukses 𝑝̂ = 0.75 dan distribusi jumlah jawaban benar, mayoritas mahasiswa
+> terlihat mampu menjawab sebagian besar soal dengan benar.
+> Selain itu  mayoritas mahasiswa menjawab ≥ 3 soal kuis dengan benar, lalu distribusi yang terkonsentrasi pada 
+> nilai terbanyak (4 dan 5), menunjukkan bahwa sebagian besar mahasiswa memahami materi kuis dengan cukup baik.
+
+> **Nomor 3**
+>
+> Perusahaan bisa mempertahankan sistem pengiriman 
+> saat ini, tetapi tetap perlu memperhatikan penyebab 
+> ketidakpuasan dari sisa pelanggan (~27%).
+
+
+```{r puas, echo=TRUE, warning=FALSE}
+# Peluang puas (x = 1)
+pmf_bernoulli(x = 1, p = 0.73)
+
+# Peluang tidak puas (x = 0)
+pmf_bernoulli(x = 0, p = 0.73)
+```
+> **Nomor 4**
+>
+> Berdasarkan distribusi Bernoulli dengan probabilitas sukses p = 0.73, maka peluang secara teoritis bahwa seorang > pelanggan puas adalah sebesar 73%. Ini menunjukkan bahwa secara umum, kemungkinan besar pelanggan akan merasa  
+> puas terhadap layanan pengiriman cepat yang diberikan oleh perusahaan.
+
+
+```{r tidak puas, echo=TRUE, warning=FALSE}
+# Peluang kumulatif hingga x = 0 (artinya: P(X ≤ > 0))
+cdf_bernoulli(x = 0, p = 0.73)
+
+# Peluang kumulatif hingga x = 1 (artinya: P(X ≤ 1) > = 1)
+cdf_bernoulli(x = 1, p = 0.73)
+```
+> **Nomor 5**
+>
+> Peluang kumulatif bahwa pelanggan tidak puas (yaitu P(X ≤ 0)) adalah 27%.
+> Ini berarti sekitar 27% dari seluruh pelanggan secara teoritis memiliki kemungkinan tidak puas terhadap layanan  > pengiriman cepat yang diberikan oleh perusahaan.
+ 
+
+## Binomial
+* **Output**
+```{r Binomial, echo=TRUE}
+library(diskrit1)
+data_binomial <- c(5, 3, 4, 2, 3, 4, 5, 5, 3, 2,
+                   4, 4, 5, 3, 2, 5, 4, 4, 3, 5)
+size <- 5
+# Estimasi probabilitas keberhasilan per soal
+estimasi_p_binomial(data_binomial, size = 5)
+```
+
+> **Nomor 1**
+> 
+> Didapatkan hasil p̂ = 0.75 maka rata-rata mahasiswa bisa menjawab 75% soal kuis dengan benar.
+
+```{r Binomial-satu, echo=TRUE}
+
+# Visualisasi jumlah sukses
+plot_binomial(data_binomial, size = 5)
+```
+
+> **Nomor 2**
+>
+> Barplot menunjukkan dominasi pada skor 4 dan 5.
+
+> **Nomor 3**
+> 
+> Dapat disimpulkan apabila  sebagian besar mahasiswa memahami materi kuis, walaupun terdapat minoritas yang 
+> menjawab hanya 2 soal benar.
+
+```{r Binomial-dua, echo=TRUE}
+
+# PMF: Peluang tepat 3 benar
+pmf_binomial(x = 3, size = 5, p = 0.75)
+```
+
+> **Nomor 4**
+> 
+> Berdasarkan model distribusi binomial dengan >peluang keberhasilan 75%, maka peluang bahwa >seorang mahasiswa 
+> menjawab tepat 3 soal benar dari >total 5 soal adalah sekitar 26.37%.
+> Ini berarti bahwa dalam populasi mahasiswa, sekitar 1 dari 4 kemungkinan akan menjawab tepat 3 > soal benar saat > peluang menjawab benar untuk tiap > soal adalah 75%.
+
+```{r Binomial-tiga, echo=TRUE}
+# CDF: Peluang ≤ 2 benar (P(X ≤ 2))
+cdf_binomial(x = 2, size = 5, p = 0.75)
+```
+
+> **Nomor 5**
+>
+> Berdasarkan distribusi binomial dengan  probabilitas mahasiswa yang menjawab soal dengan benar sebesar 75%, 
+> sedangkan peluang bahwa seorang mahasiswa hanya dapat menjawab paling  banyak 2 dari 5 soal dengan benar adalah 
+> sekitar 10.35%. Karena itu dapat diartikan kemungkinan mahasiswa dengan pemahaman  cukup baik hanya menjawab dua > soal atau kurang benar sangat kecil. Hal ini menunjukkan bahwa  sebagian besar mahasiswa cenderung mampu menjawab
+> lebih dari 2 soal dengan benar dalam kondisi  tersebut.
+
+
+
+> Sekian yang dapat kami paparkan dalam Rmarkdown 
+> ini mohon maaf apabila masih terdapat banyak 
+> kesalahan,
+> kami ucapkan terimakasih🌹
+>
+> Packages ```diskrit1``` ini dapat digunakan dengan menjalankan *syntax* berikut :
+>
+> ```{r install, echo=TRUE, warning=FALSE}
+> devtools::install_github("adibmh/diskrit1")
+> library(diskrit1)
+>
