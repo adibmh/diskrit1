@@ -440,9 +440,10 @@ pmf_binomial(x = 3, size = 5, p = 0.75)
 
 > **Nomor 4**
 > 
-> Berdasarkan model distribusi binomial dengan >peluang keberhasilan 75%, maka peluang bahwa >seorang mahasiswa 
-> menjawab tepat 3 soal benar dari >total 5 soal adalah sekitar 26.37%.
-> Ini berarti bahwa dalam populasi mahasiswa, sekitar 1 dari 4 kemungkinan akan menjawab tepat 3 > soal benar saat > peluang menjawab benar untuk tiap > soal adalah 75%.
+> Berdasarkan model distribusi binomial dengan peluang keberhasilan 75%, maka peluang bahwa seorang mahasiswa 
+> menjawab tepat 3 soal benar dari total 5 soal adalah sekitar 26.37%.
+> Ini berarti bahwa dalam populasi mahasiswa, sekitar 1 dari 4 kemungkinan akan menjawab tepat 3 soal benar saat  
+> peluang menjawab benar untuk tiap soal adalah 75%..
 
 ```{r Binomial-tiga, echo=TRUE}
 # CDF: Peluang ≤ 2 benar (P(X ≤ 2))
